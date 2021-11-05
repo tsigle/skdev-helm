@@ -1,0 +1,6 @@
+{{- include "pinglib.configmap" (list . "mongo") -}}
+
+{{- define "mongo.configmap" -}}
+data:
+  BX_VAR: "NADA"
+{{- end -}}

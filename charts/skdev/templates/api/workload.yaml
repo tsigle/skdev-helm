@@ -1,0 +1,4 @@
+{{- include "pinglib.workload" (list . "api" ) -}}
+{{- define "api.workload" -}}
+
+{{- end -}}

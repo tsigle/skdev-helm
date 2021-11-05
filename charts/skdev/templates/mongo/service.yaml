@@ -1,0 +1,4 @@
+{{- include "pinglib.service" (list . "mongo") -}}
+
+{{- define "mongo.service" -}}
+{{- end -}}

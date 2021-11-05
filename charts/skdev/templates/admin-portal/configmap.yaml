@@ -1,0 +1,6 @@
+{{- include "pinglib.configmap" (list . "admin-portal") -}}
+
+
+{{- define "admin-portal.configmap" -}}
+data:
+{{- end -}}

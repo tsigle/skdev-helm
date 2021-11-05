@@ -1,0 +1,428 @@
+mongo:
+  enabled: true
+  name: mongo
+  image: 
+    repository: docker.io
+    name: mongo
+    tag: latest
+  services:
+    http:
+      containerPort: 27017
+      servicePort: 27017
+      dataService: true
+    clusterServiceName: mongo-cluster
+  workload:
+    type: StatefulSet
+    statefulSet:
+      persistentvolume:
+        enabled: true
+        volumes:
+          out-dir:
+            mountPath: /data/db
+            persistentVolumeClaim:
+              accessModes:
+              - ReadWriteOnce
+              storageClassName:
+              resources:
+                requests:
+                  storage: 4Gi
+  container:
+    probes:
+      livenessProbe:
+        initialDelaySeconds: 1
+        periodSeconds: 5
+        timeoutSeconds: 5
+        successThreshold: 1
+        failureThreshold: 2
+        exec:
+          command:
+            - mongo
+            - --disableImplicitSessions
+            - --eval
+            - "db.adminCommand('ping')"
+      readinessProbe:
+        initialDelaySeconds: 1
+        periodSeconds: 5
+        timeoutSeconds: 5
+        successThreshold: 1
+        failureThreshold: 1
+        exec:
+          command:
+            - bash
+            - -ec
+            - mongo --disableImplicitSessions $TLS_OPTIONS --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
+      startupProbe:
+        exec:
+          command:
+            - mongo
+            - --disableImplicitSessions
+            - --eval
+            - "db.adminCommand('ping')"
+
+redis:
+  enabled: true
+  name: redis
+  image: 
+    repository: docker.io
+    name: redis
+    tag: latest
+  workload:
+    deployment:
+      strategy:
+        type: Recreate
+  container:
+    probes:
+      livenessProbe:
+        exec:
+          command:
+          - redis-cli
+          - ping
+        initialDelaySeconds: 1
+        timeoutSeconds: 5
+      readinessProbe:
+        exec:
+          command:
+          - redis-cli
+          - ping
+        initialDelaySeconds: 1
+        timeoutSeconds: 5
+      startupProbe:
+        exec:
+          command:
+          - redis-cli
+          - ping
+        initialDelaySeconds: 1
+        timeoutSeconds: 5
+  services:
+    http:
+      containerPort: 6379
+      servicePort: 6379
+      dataService: true
+      
+
+
+oe:
+  enabled: true
+  name: oe
+  image: 
+    repository: 574076504146.dkr.ecr.us-east-2.amazonaws.com
+    name: sk-oe
+    tag: latest
+  container:
+    waitFor:
+      api:
+        service: http
+        timeoutSeconds: 300
+      # mongo:
+      #   service: http
+      #   timeoutSeconds: 300
+    probes:
+      livenessProbe:
+        exec:
+          command:
+          - echo
+          - hello
+        initialDelaySeconds: 20
+        timeoutSeconds: 5
+      readinessProbe:
+        exec:
+          command:
+          - echo
+          - hello
+        initialDelaySeconds: 1
+        timeoutSeconds: 5
+      startupProbe:
+        exec:
+          command:
+          - echo
+          - hello
+        initialDelaySeconds: 1
+        timeoutSeconds: 5
+    envFrom:
+    - secretRef:
+        name: sk-secrets
+        optional: false
+  services:
+    http:
+      containerPort: 3000
+      servicePort: 3000
+      dataService: true
+
+api:
+  enabled: true
+  name: api
+  image: 
+    repository: 574076504146.dkr.ecr.us-east-2.amazonaws.com
+    name: sk-api
+    tag: latest
+  container:
+    waitFor:
+      redis:
+        service: http
+        timeoutSeconds: 300
+      mongo:
+        service: http
+        timeoutSeconds: 300
+    probes:
+      livenessProbe:
+        exec:
+          command:
+          - echo
+          - hello
+        initialDelaySeconds: 20
+        timeoutSeconds: 5
+      readinessProbe:
+        exec:
+          command:
+          - echo
+          - hello
+        initialDelaySeconds: 1
+        timeoutSeconds: 5
+      startupProbe:
+        exec:
+          command:
+          - echo
+          - hello
+        initialDelaySeconds: 1
+        timeoutSeconds: 5
+    envFrom:
+    - secretRef:
+        name: sk-secrets
+        optional: false
+  services:
+    http:
+      containerPort: 3000
+      servicePort: 3000
+      dataService: true
+
+admin-portal:
+  enabled: true
+  name: admin-portal
+  image: 
+    repository: 574076504146.dkr.ecr.us-east-2.amazonaws.com
+    name: sk-admin-portal
+    tag: latest
+  workload:
+    deployment:
+      strategy:
+        type: Recreate
+    securityContext:
+      fsGroup: 0
+      runAsUser: 0
+      runAsGroup: 0
+      # allowPrivilegeEscalation: true
+      # capabilities:
+      #   drop:
+      #   - ALL
+  container:
+    waitFor:
+      oe:
+        service: http
+        timeoutSeconds: 300
+      # mongo:
+      #   service: http
+      #   timeoutSeconds: 300
+    probes:
+      livenessProbe:
+        exec:
+          command:
+          - echo
+          - hello
+        initialDelaySeconds: 20
+        timeoutSeconds: 5
+      readinessProbe:
+        exec:
+          command:
+          - echo
+          - hello
+        initialDelaySeconds: 1
+        timeoutSeconds: 5
+      startupProbe:
+        exec:
+          command:
+          - echo
+          - hello
+        initialDelaySeconds: 1
+        timeoutSeconds: 5
+    envFrom:
+    - secretRef:
+        name: sk-secrets
+        optional: false
+    - secretRef:
+        name: npm-token
+        optional: false
+  services:
+    http:
+      containerPort: 3000
+      servicePort: 3000
+      ingressPort: 80
+      dataService: true
+
+
+
+    # - name: 02-init-test
+    #   image: busybox
+    #   command:
+    #     - /bin/sh
+    #     - /var/run/init-test.sh
+
+    # - name: 03-check-pingfederate
+    #   image: postman/newman:5-alpine
+    #   command:
+    #     - newman
+    #     - run
+    #     - /var/run/check-pingfederate.postman-collection.json
+    #     - --environment
+    #     - /var/run/generated.postman-environment.json
+    #     - --insecure
+    #     - --ignore-redirects
+
+# bxhealthapp:
+#   enabled: true
+#   name: bxhealthapp
+#   image:
+#     repository: gcr.io/ping-gte
+#     name: bxhealthapp-dev
+#     tag: latest
+#     pullPolicy: Always
+#     pullSecret: "gcr-pull-secret"
+#   privateCert:
+#     generate: true
+#   volumeMounts:
+#     - mountPath: /run/secrets/private-cert
+#       name: private-cert
+#   envs:
+#     SERVER_PROFILE_URL: ""
+#     STARTUP_COMMAND: "tail"
+#     STARTUP_BACKGROUND_OPTS: "-f /dev/null"
+#   ingress:
+#     host: bxhealth.ping-devops.com
+#   workload:
+#     deployment:
+#       strategy:
+#         type: Recreate
+#   container:
+#     resources:
+#       requests:
+#         cpu: 0
+#         memory: 1Gi
+#       limits:
+#         cpu: 1500m
+#         memory: 1Gi
+#     probes:
+#       livenessProbe:
+#         exec:
+#           command:
+#             - echo
+#       readinessProbe:
+#         exec:
+#           command:
+#             - echo
+#       startupProbe:
+#         exec:
+#           command:
+#             - echo
+#   services:
+#     https:
+#       containerPort: 5000
+#       servicePort: 5000
+#       # ingressPort: 443
+#       dataService: true
+
+global:
+  addReleaseNameToResource: none
+  workload:
+    securityContext:
+      fsGroup: 0
+      runAsUser: 0
+      runAsGroup: 0
+
+testFramework:
+  enabled: true
+  name: mongo-init
+  sharedMountPath: /var/run/shared
+
+  #########################################################
+  # If rbac is enabled, this will create:
+  #   - serviceAccount
+  #   - role
+  #   - roleBinding (between serviceAccount and role)
+  #
+  # and apply the serviceAccount to the pod in the tests.
+  # The names for these resources will be named using the
+  # naming rules for all resources including the ReleaseName
+  #########################################################
+  rbac:
+    enabled: false
+    role:
+      rules:
+      - apiGroups:
+        - '*'
+        resources:
+        - '*'
+        verbs:
+        - '*'
+
+  testConfigMaps: null
+  testSteps:
+    - name: 01-wait-for
+      waitFor:
+        mongo:
+          service: http
+    #########################################################
+    # Array of steps.
+    # Example includes:
+    #
+    # waitFor - Example below will create 2 init containers:
+    #           - 01-wait-for-pingfederate-admin
+    #           - 01-wait-for-pingfederate-engine
+    #########################################################
+    - name: 02-initialize-mongo
+      image: 574076504146.dkr.ecr.us-east-2.amazonaws.com/sk-mongo-init
+      command:
+        - node
+        - index.js
+  finalStep:
+    name: 99-completion
+    image: busybox
+    imagePullPolicy: IfNotPresent
+    command:
+      - /bin/sh
+      - -c
+      - echo "*************************************"; echo "Database config complete"; date; echo "*************************************";
+      - exit 0
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      requests:
+        cpu: 1m
+        memory: 64Mi
+
+  #########################################################
+  # Pod information to include
+  #
+  # Examples:
+  #   securityContext for all containers
+  #########################################################
+  pod:
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 2000
+
+
+ping-devops:
+  global: 
+    ingress:
+      enabled: false
+      addReleaseNameToHost: append
+      defaultDomain: ping-devops.com
+      defaultTlsSecret:
+      annotations:
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        kubernetes.io/ingress.class: "nginx-public"
+  workload:
+    securityContext:
+      fsGroup: 0
+      runAsUser: 0
+      runAsGroup: 0

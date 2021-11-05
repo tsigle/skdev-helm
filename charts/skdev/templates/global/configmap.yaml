@@ -1,0 +1,9 @@
+{{- include "pinglib.configmap" (list . "bx-global") -}}
+
+{{- define "bx-global.configmap" -}}
+{{- $top := index . 0 -}}
+{{- $v := index . 1 -}}
+
+data:
+  NONE: "NADA"
+{{- end -}}

@@ -1,0 +1,8 @@
+{{- include "pinglib.workload" (list . "mongo") -}}
+{{- define "mongo.workload" -}}
+spec:
+  template:
+    metadata:
+      labels:
+        clusterIdentifier: {{ include "pinglib.addreleasename" (append . "mongo") }}
+{{- end -}}

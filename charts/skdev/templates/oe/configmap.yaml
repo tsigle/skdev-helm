@@ -1,0 +1,6 @@
+{{- include "pinglib.configmap" (list . "oe") -}}
+
+
+{{- define "oe.configmap" -}}
+data:
+{{- end -}}

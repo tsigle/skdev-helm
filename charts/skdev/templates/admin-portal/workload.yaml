@@ -1,0 +1,4 @@
+{{- include "pinglib.workload" (list . "admin-portal" ) -}}
+{{- define "admin-portal.workload" -}}
+
+{{- end -}}

@@ -1,0 +1,4 @@
+{{- include "pinglib.workload" (list . "redis" ) -}}
+{{- define "redis.workload" -}}
+
+{{- end -}}

@@ -1,0 +1,6 @@
+{{- include "pinglib.service" (list . "admin-portal") -}}
+
+
+
+{{- define "admin-portal.service" -}}
+{{- end -}}

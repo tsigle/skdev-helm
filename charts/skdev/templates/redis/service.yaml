@@ -1,0 +1,6 @@
+{{- include "pinglib.service" (list . "redis") -}}
+
+
+
+{{- define "redis.service" -}}
+{{- end -}}
