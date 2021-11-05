@@ -1,0 +1,7 @@
+{{- if (merge (index .Values "admin-portal") .Values.global).ingress.enabled }}
+{{- include "pinglib.ingress" (list . "admin-portal") -}}
+{{- end -}}
+
+
+{{- define "admin-portal.ingress" -}}
+{{- end -}}
