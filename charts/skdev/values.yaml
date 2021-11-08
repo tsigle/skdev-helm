@@ -5,6 +5,7 @@ mongo:
     repository: docker.io
     name: mongo
     tag: latest
+    pullPolicy: Always
   services:
     http:
       containerPort: 27017
@@ -66,6 +67,7 @@ redis:
     repository: docker.io
     name: redis
     tag: latest
+    pullPolicy: Always
   workload:
     deployment:
       strategy:
@@ -108,6 +110,7 @@ oe:
     repository: 574076504146.dkr.ecr.us-east-2.amazonaws.com
     name: sk-oe
     tag: latest
+    pullPolicy: Always
   container:
     waitFor:
       api:
@@ -155,6 +158,7 @@ api:
     repository: 574076504146.dkr.ecr.us-east-2.amazonaws.com
     name: sk-api
     tag: latest
+    pullPolicy: Always
   container:
     waitFor:
       redis:
@@ -202,6 +206,7 @@ admin-portal:
     repository: 574076504146.dkr.ecr.us-east-2.amazonaws.com
     name: sk-admin-portal
     tag: latest
+    pullPolicy: Always
   ingress:
     enabled: true
     addReleaseNameToHost: prepend
