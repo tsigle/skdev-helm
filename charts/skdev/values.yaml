@@ -276,7 +276,7 @@ admin-portal:
         optional: false
   services:
     http:
-      containerPort: 3001
+      containerPort: 80
       servicePort: 3001
       ingressPort: 443
       dataService: true
