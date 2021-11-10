@@ -223,7 +223,7 @@ admin-portal:
   image: 
     repository: 574076504146.dkr.ecr.us-east-2.amazonaws.com
     name: sk-admin-portal
-    tag: latest
+    tag: samir
     pullPolicy: Always
   ingress:
     enabled: true
