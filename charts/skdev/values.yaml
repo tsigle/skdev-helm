@@ -173,6 +173,10 @@ api:
           pathType: Prefix
           backend:
             serviceName: http
+    tls:
+      - secretName: _defaultTlsSecret_
+        hosts:
+          - api._defaultDomain_
   container:
     waitFor:
       redis:
