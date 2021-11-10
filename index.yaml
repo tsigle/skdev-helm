@@ -3,7 +3,7 @@ entries:
   skdev:
   - apiVersion: v2
     appVersion: 0.7.8
-    created: "2021-11-08T17:31:17.673187-08:00"
+    created: "2021-11-09T17:26:38.182756-08:00"
     dependencies:
     - import-values:
       - child: global
@@ -12,10 +12,10 @@ entries:
       repository: https://helm.pingidentity.com
       version: 0.7.8
     description: Deploy an sk dev environment
-    digest: 7cd6fec641e752fc9fbea2acb6a239980cf3bee6be03c661e8ffd8fe5f7f4fd0
+    digest: 551615329d7b4e0d5268efde15e2e9e7eeb34bb9cb976c975d40a062e920d3a5
     name: skdev
     type: application
     urls:
     - https://pingidentity-sk.github.io/skdev-helm/skdev-0.0.1.tgz
     version: 0.0.1
-generated: "2021-11-08T17:31:17.666003-08:00"
+generated: "2021-11-09T17:26:38.176289-08:00"

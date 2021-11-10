@@ -159,6 +159,20 @@ api:
     name: sk-api
     tag: latest
     pullPolicy: Always
+  ingress:
+    enabled: true
+    addReleaseNameToHost: prepend
+    defaultDomain: ping-devops.com
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      kubernetes.io/ingress.class: "nginx-public"
+    hosts:
+      - host: api._defaultDomain_
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            serviceName: http
   container:
     waitFor:
       redis:
@@ -225,6 +239,8 @@ admin-portal:
       - secretName: _defaultTlsSecret_
         hosts:
           - admin-portal._defaultDomain_
+  envs:
+    REACT_APP_API_URL: https://rohit-api.ping-devops.com
   workload:
     deployment:
       strategy:
@@ -354,11 +370,11 @@ admin-portal:
 
 global:
   addReleaseNameToResource: none
-  workload:
-    securityContext:
-      fsGroup: 0
-      runAsUser: 0
-      runAsGroup: 0
+  # workload:
+  #   securityContext:
+  #     fsGroup: 0
+  #     runAsUser: 0
+  #     runAsGroup: 0
 
 testFramework:
   enabled: true
