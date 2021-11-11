@@ -244,8 +244,6 @@ admin-portal:
       - secretName: _defaultTlsSecret_
         hosts:
           - admin-portal._defaultDomain_
-  envs:
-    REACT_APP_API_URL: https://rohit-api.ping-devops.com
   workload:
     deployment:
       strategy:
