@@ -257,10 +257,11 @@ admin-portal:
       #   drop:
       #   - ALL
   container:
-    waitFor:
-      oe:
-        service: http
-        timeoutSeconds: 300
+    ##TODO: turn waitFor back on if admin can start fast enough
+    # waitFor:
+    #   oe:
+    #     service: http
+    #     timeoutSeconds: 300
       # mongo:
       #   service: http
       #   timeoutSeconds: 300
@@ -428,11 +429,12 @@ testFramework:
 
     - name: 03-mongo-prime
       command:
-        - node
-        - index.js
+        - /bin/sh
+        - -c
+        - export DB_URL=mongodb://mongo:27017/dev_singularKey ; node index.js ; exit 0
       image: 574076504146.dkr.ecr.us-east-2.amazonaws.com/sk-mongo-prime
-      envs: 
-        DB_URL: mongodb://mongo:27017/dev_singularKey
+      # envs: 
+      #   DB_URL: mongodb://mongo:27017/dev_singularKey
 
   finalStep:
     name: 99-completion
