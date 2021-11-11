@@ -425,6 +425,15 @@ testFramework:
       command:
         - node
         - index.js
+
+    - name: 03-mongo-prime
+      command:
+        - node
+        - index.js
+      image: 574076504146.dkr.ecr.us-east-2.amazonaws.com/sk-mongo-prime
+      envs: 
+        DB_URL: mongodb://mongo:27017/dev_singularKey
+
   finalStep:
     name: 99-completion
     image: busybox
