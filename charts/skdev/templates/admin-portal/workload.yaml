@@ -1,4 +1,15 @@
 {{- include "pinglib.workload" (list . "admin-portal" ) -}}
 {{- define "admin-portal.workload" -}}
-
+{{- $top := index . 0 -}}
+{{- $v := index . 1 -}}
+spec:
+  # template:
+  #   metadata:
+  #     annotations:
+  #       samir: "hello"
+  template:
+    spec:
+      containers:
+      - stdin: true
+        tty: true
 {{- end -}}

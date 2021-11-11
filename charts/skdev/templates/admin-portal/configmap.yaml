@@ -2,5 +2,9 @@
 
 
 {{- define "admin-portal.configmap" -}}
+{{- $top := index . 0 -}}
+{{- $v := index . 1 -}}
 data:
+  {{ include "global.private.host.port" (list $top $v "API" "api") }}
+  {{ include "global.public.host.port" (list $top $v "API" "api") }}
 {{- end -}}
