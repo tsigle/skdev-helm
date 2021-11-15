@@ -1,6 +1,6 @@
 apiVersion: v2
-name: skdev
-description: Deploy an sk dev environment
+name: code-server
+description: A Helm chart for cdr/code-server
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -15,19 +15,9 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.0.1
+version: 1.0.5
 
-# This matches the version of `ping-devops` this chart depends on 
-appVersion: "0.7.8"
-
-# Use PingIdentity Repo to deploy Product Services \ Deployments
-dependencies:
-- name: ping-devops
-  version: 0.7.8
-  repository: https://helm.pingidentity.com
-  import-values:
-    - child: global
-      parent: global
-- name: code-server
-  version: 1.0.5
-  repository: "file://../skdev/charts/code-server"
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application. Versions are not expected to
+# follow Semantic Versioning. They should reflect the version the application is using.
+appVersion: 3.12.0

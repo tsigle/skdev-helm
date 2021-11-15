@@ -480,3 +480,34 @@ ping-devops:
       fsGroup: 0
       runAsUser: 0
       runAsGroup: 0
+
+code-server:
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      kubernetes.io/ingress.class: "nginx-public"
+    hosts:
+      - host: code-server.ping-devops.com
+        paths:
+          - /
+
+    tls:
+      - hosts:
+        - code-server.example.loc
+# spec:
+#   tls:
+#     - hosts:
+#         - "code-server.example.loc"
+#       secretName:
+#   rules:
+#     - host: "code-server.ping-devops.com"
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: sg-code-server
+#                 port:
+#                   number: 8080

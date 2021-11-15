@@ -2,5 +2,8 @@ dependencies:
 - name: ping-devops
   repository: https://helm.pingidentity.com
   version: 0.7.8
-digest: sha256:aedb67fe110a9be3c64c0a05fafac268b415b6c27cb1e6bdd88e945129587135
-generated: "2021-11-05T01:19:18.770034-06:00"
+- name: code-server
+  repository: file://../skdev/charts/code-server
+  version: 1.0.5
+digest: sha256:592374b834d19d3bb1926776ec8c5a30d33119b374c7f205d9d22f890a9f570c
+generated: "2021-11-15T16:04:38.203963-07:00"
