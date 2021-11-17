@@ -58,6 +58,10 @@ spec:
           securityContext:
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
+          envFrom:
+          - secretRef:
+              name: sk-secrets
+              optional: false
           env:
         {{- if .Values.extraVars }}
 {{ toYaml .Values.extraVars | indent 10 }}

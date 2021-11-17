@@ -2,7 +2,7 @@ mongo:
   enabled: true
   name: mongo
   image: 
-    repository: docker.io
+    repository: 574076504146.dkr.ecr.us-east-2.amazonaws.com
     name: mongo
     tag: latest
     pullPolicy: Always
@@ -64,7 +64,7 @@ redis:
   enabled: true
   name: redis
   image: 
-    repository: docker.io
+    repository: 574076504146.dkr.ecr.us-east-2.amazonaws.com
     name: redis
     tag: latest
     pullPolicy: Always
