@@ -72,7 +72,7 @@ extraVars: []
 ## volumePermissions: Change the owner of the persist volume mountpoint to RunAsUser:fsGroup
 ##
 volumePermissions:
-  enabled: true
+  enabled: false
   securityContext:
     runAsUser: 0
 
